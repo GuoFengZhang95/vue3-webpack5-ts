@@ -1,0 +1,63 @@
+{
+  "name": "vue3-webpack5-ts",
+  "version": "1.0.0",
+  "description": "vue3 webpack5 typescript",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack serve  --env mode=local env=dev --config ./build/webpack.dev.config.js",
+    "test": "webpack serve  --env mode=local env=test --config ./build/webpack.dev.config.js",
+    "pre": "webpack serve  --env mode=local env=pre --config ./build/webpack.dev.config.js",
+    "build:dev": "webpack  --env mode=server env=dev --config ./build/webpack.build.config.js",
+    "build:test": "webpack  --env mode=server env=test --config ./build/webpack.build.config.js",
+    "build:pre": "webpack  --env mode=server env=pre --config ./build/webpack.build.config.js",
+    "build:prod": "webpack  --env mode=server env=prod --config ./build/webpack.build.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuoFengZhang95/vue3-webpack5-ts.git"
+  },
+  "author": "zhangguofeng",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GuoFengZhang95/vue3-webpack5-ts/issues"
+  },
+  "homepage": "https://github.com/GuoFengZhang95/vue3-webpack5-ts#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "babel-loader": "^8.2.3",
+    "babel-plugin-import": "^1.13.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "compression-webpack-plugin": "^9.2.0",
+    "copy-webpack-plugin": "^9.1.0",
+    "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^3.4.1",
+    "html-webpack-plugin": "^5.5.0",
+    "launch-editor-middleware": "^2.3.0",
+    "less-loader": "^6.1.2",
+    "mini-css-extract-plugin": "^2.6.0",
+    "nprogress": "^0.2.0",
+    "postcss": "^8.4.12",
+    "postcss-loader": "^6.2.1",
+    "postcss-preset-env": "^7.4.3",
+    "style-loader": "^3.3.1",
+    "style-resources-loader": "^1.5.0",
+    "terser-webpack-plugin": "^5.3.1",
+    "thread-loader": "^3.0.4",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.2",
+    "vue-loader": "^17.0.0",
+    "vue-template-compiler": "^2.6.14",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4",
+    "webpack-merge": "^5.8.0",
+    "webpackbar": "^5.0.2"
+  },
+  "dependencies": {
+    "axios": "^0.26.1",
+    "core-js": "^3.21.1",
+    "vue": "^3.2.36"
+  }
+}
