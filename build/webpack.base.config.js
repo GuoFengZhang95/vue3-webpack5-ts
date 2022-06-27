@@ -1,4 +1,5 @@
 const path = require('path')
+const Webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin') //生成dist文件夹下的html模板
 const { VueLoaderPlugin } = require('vue-loader')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
@@ -50,10 +51,9 @@ module.exports = {
   },
   resolve: {
     alias: {
-      // vue$: "vue/dist/vue.esm.js", //加上这一句
       '@': path.resolve(__dirname, '../src'),
     },
-    extensions: ['.vue', 'ts', '.js'],
+    extensions: ['.vue', '.ts', '.js'],
   },
   module: {
     rules: [
@@ -62,7 +62,6 @@ module.exports = {
         test: /\.m?js$/,
         include: [
           path.resolve(__dirname, '../src'),
-          path.resolve(__dirname, '../node_modules/vuex'),
         ],
         use: [
           {
@@ -74,15 +73,20 @@ module.exports = {
         ]
       },
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         include: [
           path.resolve(__dirname, '../src'),
         ],
+        exclude: /node_modules/,
         use: [
           {
             loader: 'ts-loader',
+            options: {
+              appendTsSuffixTo: [/\.vue$/],
+            },
+
           },
-        ]
+        ],
       },
       {
         test: /\.vue$/,
@@ -164,5 +168,10 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
     new WebpackBar(),
+    // https://github.com/vuejs/core/tree/main/packages/vue#bundler-build-feature-flags
+    new Webpack.DefinePlugin({
+      'process.env.__VUE_OPTIONS_API__': JSON.stringify(true),
+      'process.env.__VUE_PROD_DEVTOOLS__': JSON.stringify(true),
+    }),
   ],
 }
