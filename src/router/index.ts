@@ -1,5 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
+  {
+    path: '/',
+    component: () => import('../layout/index.vue'),
+  },
   // 403
   {
     path: '/403',

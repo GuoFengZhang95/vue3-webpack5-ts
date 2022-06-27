@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { useAppStore } from '@/store/index'
-const appStore = useAppStore()
+import zhCN from 'ant-design-vue/es/locale/zh_CN'
 </script>
 <template>
-  <div>
-    <h1>我是根节点</h1>
-    <p>{{ appStore.pageSize }}</p>
-    <a-button type="primary">按钮</a-button>
-    <RouterView></RouterView>
-  </div>
+  <a-config-provider :locale="zhCN">
+    <div id="app">
+      <router-view></router-view>
+    </div>
+  </a-config-provider>
 </template>
 
-<style lang="css">
+<style lang="scss">
 </style>

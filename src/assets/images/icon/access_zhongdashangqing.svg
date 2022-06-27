@@ -1,0 +1,27 @@
+<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 376">
+<circle id="Ellipse 39" cx="23" cy="23" r="23" fill="#FF9919" fill-opacity="0.15"/>
+<g id="Group 13">
+<g id="&#231;&#188;&#150;&#231;&#187;&#132;-13&#229;&#164;&#135;&#228;&#187;&#189;">
+<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M28.4182 29.2451C28.4182 27.8173 29.2272 26.5431 30.2585 25.5557C32.086 23.8059 33.224 21.3418 33.224 18.612C33.224 13.3034 28.9206 9 23.612 9C18.3034 9 14 13.3034 14 18.612C14 21.3419 15.1381 23.8061 16.9656 25.5558C17.997 26.5433 18.8062 27.8175 18.8062 29.2454V30.6796C18.8062 31.2319 19.2539 31.6796 19.8062 31.6796H27.4182C27.9704 31.6796 28.4182 31.2319 28.4182 30.6796V29.2451Z" fill="url(#paint0_linear_275_4193)"/>
+</g>
+<rect id="Rectangle 160" x="19.1821" y="32.9922" width="9.02692" height="3.00897" rx="1.5" fill="url(#paint1_linear_275_4193)" fill-opacity="0.5"/>
+<g id="&#233;&#151;&#170;&#232;&#129;&#152; 1" clip-path="url(#clip0_275_4193)">
+<path id="Vector" d="M26.9773 19.2452H25.1021C24.9332 19.2452 24.804 19.0823 24.8315 18.9048L25.4992 14.537C25.5431 14.2509 25.212 14.0778 25.0266 14.2891L20.3063 19.6839C20.1428 19.8717 20.2664 20.1783 20.5069 20.1783H22.3821C22.551 20.1783 22.6802 20.3412 22.6527 20.5187L21.985 24.8865C21.9411 25.1726 22.2722 25.3457 22.4576 25.1345L27.1779 19.7396C27.3428 19.5518 27.2178 19.2452 26.9773 19.2452Z" fill="#FFF2D9"/>
+</g>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_275_4193" x1="16.5084" y1="10.1709" x2="35.2217" y2="26.8639" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFBF36"/>
+<stop offset="0.999287" stop-color="#FEA12C"/>
+</linearGradient>
+<linearGradient id="paint1_linear_275_4193" x1="20.0141" y1="32.9922" x2="21.5588" y2="38.0446" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFBF36"/>
+<stop offset="0.999287" stop-color="#FEA12C"/>
+</linearGradient>
+<clipPath id="clip0_275_4193">
+<rect width="13.0389" height="13.0389" fill="white" transform="translate(17.1763 12.9375)"/>
+</clipPath>
+</defs>
+</svg>

@@ -7,14 +7,16 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-     "@/*": ["src/*"] 
-    }
+      "@/*": [
+        "src/*"
+      ]
+    },
   },
   "include": [
     "src/**/*",
     "*.d.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
   ]
 }

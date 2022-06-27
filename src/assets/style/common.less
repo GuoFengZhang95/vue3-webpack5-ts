@@ -1,0 +1,155 @@
+@import './reset.less';
+@import './antDesignVue.less';
+
+.ml24 {
+  margin-left: 24px;
+}
+
+.mr24 {
+  margin-right: 24px;
+}
+
+// 设置滚动条
+/* 滚动条宽度 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* 滚动条背景 */
+::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+
+/* 滚动条颜色 */
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #d0d0d0;
+  display: block;
+
+  //   /* 滚动条颜色鼠标放上去颜色 */
+  &:hover {
+    background-color: rgba(144, 147, 153, 0.5);
+    display: block;
+  }
+}
+
+// flex 居中
+.center-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.span-link {
+  color: #00c7db;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+//1200迁移表格
+.mumuxili-table {
+
+  .mt15 {
+    margin-top: 15px;
+  }
+
+  .ml10 {
+    margin-left: 10px;
+  }
+
+  .mr10 {
+    margin-right: 10px;
+  }
+
+  .mb10 {
+    margin-bottom: 10px;
+  }
+
+  .plr20 {
+    padding: 0 20px;
+  }
+
+  .lr {
+    float: left;
+  }
+
+  .table-filter {
+    margin-bottom: 10px;
+
+    h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .table-filter-main {
+      background: #f9f9f9;
+      border-radius: 3px;
+      padding: 15px 10px;
+    }
+  }
+}
+
+.ant-modal-footer {
+  border-top: none;
+  padding: 10px 24px 24px;
+}
+i,
+em {
+  font-style: normal;
+}
+
+.ant-calendar-footer-extra .sure {
+  box-shadow: none !important;
+}
+
+.modal-footer {
+  padding: 10px 4px 0;
+  text-align: right;
+  .mu-button {
+    &:last-child {
+      margin-left: 8px;
+    }
+  }
+}
+
+/* 单行文本超出显示省略号 */
+.show-line_1 {
+  /*超出部分隐藏*/
+  overflow: hidden;
+  /* 超出部分显示省略号 */
+  text-overflow: ellipsis;
+  /*规定段落中的文本不进行换行 */
+  white-space: nowrap;
+  /*英文单词折行*/
+  word-break: break-all;
+}
+
+/* 多行文本超出显示省略号 */
+.show-line_2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  /*英文单词折行*/
+  word-break: break-all;
+}
+
+/* 多行文本超出显示省略号 */
+.show-line_3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  /*英文单词折行*/
+  word-break: break-all;
+}

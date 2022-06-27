@@ -1,0 +1,21 @@
+// 单行文本超出显示省略号
+.ellipsis {
+  /*超出部分隐藏*/
+  overflow: hidden;
+  /* 超出部分显示省略号 */
+  text-overflow: ellipsis;
+  /*规定段落中的文本不进行换行 */
+  white-space: nowrap;
+  /*英文单词折行*/
+  word-break: break-all;
+}
+
+// 多行文本超出显示省略号
+.ellipsisLines(@lines) {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: @lines;
+  // white-space: nowrap;
+  word-break: break-all;
+}

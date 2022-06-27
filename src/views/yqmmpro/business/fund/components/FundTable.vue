@@ -1,0 +1,480 @@
+<template>
+  <div class="fund-table">
+    <div class="table-pad">
+      <MuTable
+        ref="mumuTable"
+        :key="keys"
+        :has-index="true"
+        :selections-flag="true"
+        :selections-all-flag="true"
+        :selections-toggle-flag="false"
+        row-key="tokenEncodeId"
+        :selected-row-keys="selectedRowKeys"
+        :is-loading="isLoading"
+        :setting-act-flag="true"
+        :page="queryParams.pageNum"
+        :page-size="queryParams.pageSize"
+        :total="total"
+        :columns="columns"
+        :data-source="dataSource"
+        :resize-height-offset="210"
+        @pageChange="pageChange"
+        @pageSizeChange="pageSizeChange"
+        @reloadTable="reloadTable"
+        @handleFilter="handleFilter"
+        @handleRowClick="handleRowClick"
+        @dragTableHeaderOver="dragTableHeaderOver"
+        @setTableHeader="setTableHeader"
+      >
+        <template slot="action">
+          <div class="actions-wrapper">
+            <div class="left">
+              <MuSearchGroup
+                :ref="keys"
+                :placeholder="searchPlaceholder"
+                :select-visible="true"
+                :has-reset="hasReset"
+                :options-list="selectOptions"
+                @resetFilter="resetFilter"
+                @search="handleSearch"
+                @selectChange="e => (queryParams.searchType = e)"
+              ></MuSearchGroup>
+            </div>
+            <div class="right">
+              <ExportButton
+                v-if="resultOperationsVisible"
+                :loading="exportLoading"
+                :type="1"
+                @click.native="beforeExport"
+              ></ExportButton>
+              <ExportButton v-if="resultOperationsRightVisible" :type="2"></ExportButton>
+            </div>
+          </div>
+        </template>
+        <!-- 负责人 -->
+        <template #userSlot="slotProps">
+          <i v-if="slotProps.text.list.length === 0">-</i>
+          <a-tooltip v-else>
+            <template slot="title">
+              <i>{{ slotProps.text.string }}</i>
+            </template>
+            <i
+              v-for="(user, index) in slotProps.text.list"
+              :key="user.memberUserId"
+              :class="user.disabled ? 'disabled' : ''"
+              class="action-item-user"
+              @click="handleUserClick(user)"
+            >
+              {{ user.memberUserName }}
+              <i v-if="slotProps.text.list.length > index + 1">，</i>
+            </i>
+          </a-tooltip>
+        </template>
+      </MuTable>
+      <ExportModal
+        :visible.sync="exportVisible"
+        :step="exportStep"
+        :selected-num="selectedNum"
+        :consume-quota="exportConsumeQuota"
+        :reduce-quota="exportReduceQuota"
+        :remain-times="exportRemainTimes"
+        :field-names="exportFieldNames"
+        :loading="exportLoading"
+        @export="handleExport"
+        @continueExport="handleContinueExport"
+      ></ExportModal>
+    </div>
+  </div>
+</template>
+
+<script>
+  import { mapGetters } from 'vuex'
+  import { tableMix, exportMix } from '@/mixin/index'
+  import { addExportSortDataSuffix } from '@/tools/index.js'
+  import { cloneDeep } from '@/utils/index'
+  import { getUnLockList } from '@/api/index.js'
+  import {
+    getFundExportFilters,
+    fundTableListFilter,
+    getFundColumns,
+    updateTableColumns,
+  } from '@/service/index.js'
+  const FundDetail = () => import('@/views/yqmmpro/components/FundDetail.vue')
+  const ResearcherDetail = () => import('@/views/yqmmpro/components/ResearcherDetail.vue')
+
+  export default {
+    name: 'FundTable',
+    mixins: [
+      tableMix,
+      exportMix({
+        exportFieldNames:
+          '名称、类型、级别、项目来源、来源城市、类别、批准号、依托单位、依托单位所属城市、负责人、科研经费、立项时间、结项时间、学科、关键词、英文关键词、中文摘要、英文摘要、结题摘要。',
+      }),
+    ],
+    props: {
+      keys: {
+        type: String,
+        default: '',
+      },
+    },
+    data() {
+      return {
+        searchPlaceholder: '请输入搜索内容',
+        queryParams: {
+          module: 7,
+          subModule: 1, // 1我的 2全部
+          pageNum: 1,
+          pageSize: 20,
+          searchKey: '',
+          searchType: '0',
+          sort: 3,
+        },
+        selectOptions: [
+          {
+            label: '综合搜索',
+            value: '0',
+          },
+          {
+            label: '名称',
+            value: '1',
+          },
+          {
+            label: '负责人',
+            value: '2',
+          },
+          {
+            label: '依托单位',
+            value: '3',
+          },
+        ],
+        columns: [],
+        projectTypeList: [
+          {
+            label: '纵向基金',
+            value: '1',
+          },
+          {
+            label: '横向课题',
+            value: '2',
+          },
+        ],
+      }
+    },
+    computed: {
+      ...mapGetters(['cityDict', 'projectCategoryTreeDict', 'projectSubjectTreeDict']),
+      hasReset() {
+        return this.columns.some(c => c.filtered)
+      },
+      /**导出所需参数 */
+      exportFilters() {
+        let minProjectFunds = this.filterObj?.projectFunds?.value[0] ?? ''
+        let maxProjectFunds = this.filterObj?.projectFunds?.value[1] ?? ''
+        let projectFundsName = ''
+        if (minProjectFunds || maxProjectFunds) {
+          projectFundsName = `科研经费：${minProjectFunds}-${maxProjectFunds}万元`
+        }
+
+        return Object.assign({}, getFundExportFilters(), {
+          /**关键词 */
+          searchKey: this.queryParams.searchKey,
+          /**关键词范围 */
+          searchType: this.queryParams.searchType,
+          searchTypeName: this.selectOptions.find(item => item.value === this.queryParams.searchType)
+            .label,
+          sort: this.queryParams.sort,
+          /**类型 */
+          projectType: this.filterObj?.projectTypeName?.value.join(',') ?? '',
+          projectTypeName:
+            this.filterObj?.projectTypeName?.data.map(item => item.label).join(',') ?? '',
+          /**学科 */
+          projectSubject: this.filterObj?.projectSubjectName?.value.join(',') ?? '',
+          projectSubjectName:
+            this.filterObj?.projectSubjectName?.selectedItems.map(item => item.name).join(',') ?? '',
+          /**级别 */
+          projectCategory: this.filterObj?.projectCategoryName?.value.join(',') ?? '',
+          projectCategoryName:
+            this.filterObj?.projectCategoryName?.selectedItems.map(item => item.name).join(',') ?? '',
+          /**来源城市 */
+          projectSourceCity: this.filterObj?.projectSourceCityName?.value.join(',') ?? '',
+          projectSourceCityName:
+            this.filterObj?.projectSourceCityName?.selectedItems.map(item => item.name).join(',') ??
+            '',
+          /**依托单位所属城市 */
+          projectCity: this.filterObj?.projectCity?.value.join(',') ?? '',
+          projectCityName:
+            this.filterObj?.projectCity?.selectedItems.map(item => item.name).join(',') ?? '',
+          /**科研经费 */
+          minProjectFunds,
+          maxProjectFunds,
+          projectFundsName,
+          // /**立项时间 */
+          startTime: addExportSortDataSuffix(this.filterObj?.startTimeSort?.value ?? ''),
+          minStartTime: this.filterObj?.startTime?.value[0] ?? '',
+          maxStartTime: this.filterObj?.startTime?.value[1] ?? '',
+          /**结项时间 */
+          endTime: addExportSortDataSuffix(this.filterObj?.endTimeSort?.value ?? ''),
+          minEndTime: this.filterObj?.endTime?.value[0] ?? '',
+          maxEndTime: this.filterObj?.endTime?.value[1] ?? '',
+          /**解锁时间 */
+          unLockTime: addExportSortDataSuffix(this.filterObj?.unLockTimeSort?.value ?? ''),
+          minUnLockTime: this.filterObj?.unLockTime?.value[0] ?? '',
+          maxUnLockTime: this.filterObj?.unLockTime?.value[1] ?? '',
+          /**解锁人 */
+          unLockUserName: this.filterObj?.unLockUserName?.value?.searchKey ?? '',
+        })
+      },
+    },
+    watch: {
+      keys: {
+        immediate: true,
+        handler(val) {
+          let columns = cloneDeep([
+            ...getFundColumns({
+              filterVisible: ['projectTypeName', 'startTime', 'endTime'],
+            }),
+            {
+              dataIndex: 'unLockTime',
+              title: '解锁时间',
+              filter: ['sort', 'date'],
+              filterKey: ['unLockTimeSort', 'unLockTime'],
+            },
+          ])
+          if (val === 'mine') {
+            this.columns = columns
+            this.setExportModule(11)
+          } else {
+            columns.splice(-1, 0, {
+              dataIndex: 'unLockUserName',
+              title: '解锁人',
+              filter: ['headSearch'],
+              filterKey: 'unLockUserName',
+            })
+            this.columns = columns
+            this.setExportModule(12)
+          }
+          this.columns = updateTableColumns(this.columns, [
+            {
+              dataIndex: 'projectTypeName',
+              checkOpts: this.projectTypeList,
+            },
+            {
+              dataIndex: 'projectCategoryName',
+              checkOpts: this.projectCategoryTreeDict,
+            },
+            {
+              dataIndex: 'projectSourceCityName',
+              checkOpts: this.cityDict,
+            },
+            {
+              dataIndex: 'projectSubjectName',
+              checkOpts: this.projectSubjectTreeDict,
+            },
+            {
+              dataIndex: 'memberCityNames',
+              checkOpts: this.cityDict,
+            },
+          ])
+        },
+      },
+    },
+    created() {
+      this.init()
+    },
+    methods: {
+      init() {
+        this.queryParams.subModule = this.keys === 'mine' ? 1 : 2
+        this.loadFilterData()
+        this.defaultTableInit()
+      },
+      // 加载表头筛选数据
+      async loadFilterData() {
+        this.$store.dispatch('dictionary/getTargetDicts', [
+          'getProjectCategoryTree',
+          'getProjectSubjectTree',
+        ])
+      },
+      // 列表数据
+      async defaultTableInit() {
+        this.queryParams.pageNum = 1
+        await this.handleQuery()
+      },
+      // 加载列表
+      async handleQuery() {
+        if ((await this.$parent.checkListPower()) === 3 && this.$parent.tabList.length === 2) return
+        const {
+          projectTypeName,
+          projectCategoryName,
+          projectSourceCityName,
+          projectSubjectName,
+          projectCity,
+          projectCompany,
+          memberUserName,
+          projectFunds,
+          projectFundsSort,
+          startTime,
+          startTimeSort,
+          endTime,
+          endTimeSort,
+          unLockTime,
+          unLockTimeSort,
+          unLockUserName,
+        } = this.filterObj
+        let sort = 3 //默认解锁时间倒序
+        if (projectFundsSort?.filtered) {
+          if (projectFundsSort.value === 'descend') {
+            sort = 9
+          } else {
+            sort = 10
+          }
+        } else if (startTimeSort?.filtered) {
+          if (startTimeSort.value === 'descend') {
+            sort = 11
+          } else {
+            sort = 12
+          }
+        } else if (endTimeSort?.filtered) {
+          if (endTimeSort.value === 'descend') {
+            sort = 13
+          } else {
+            sort = 14
+          }
+        } else if (unLockTimeSort?.filtered) {
+          if (unLockTimeSort.value === 'descend') {
+            sort = 3
+          } else {
+            sort = 4
+          }
+        }
+        // console.log(this.filterObj)
+        this.isLoading = true
+        Object.assign(this.queryParams, {
+          projectType: projectTypeName?.value?.join(',') ?? '',
+          projectCategory: projectCategoryName?.value?.join(',') ?? '',
+          projectSourceCity: projectSourceCityName?.value?.join(',') ?? '',
+          projectSubjectIds: projectSubjectName?.value?.join(',') ?? '',
+          projectCityIds: projectCity?.value?.join(',') ?? '',
+          projectCompany: projectCompany?.value?.searchKey ?? '',
+          projectMember: memberUserName?.value?.searchKey ?? '',
+          minProjectFunds: projectFunds?.value[0] ?? '',
+          maxProjectFunds: projectFunds?.value[1] ?? '',
+          minStartTime: startTime?.value[0] ?? '',
+          maxStartTime: startTime?.value[1] ?? '',
+          minEndTime: endTime?.value[0] ?? '',
+          maxEndTime: endTime?.value[1] ?? '',
+          minUnLockTime: unLockTime?.value[0] ?? '',
+          maxUnLockTime: unLockTime?.value[1] ?? '',
+          unLockUserName: unLockUserName?.value?.searchKey ?? '',
+          sort: sort,
+        })
+        let { code, data } = await getUnLockList(this.queryParams)
+        this.isLoading = false
+        if (code === '0') {
+          if (!data.list) return false
+          this.total = data.total
+          this.dataSource = fundTableListFilter({
+            list: data.list.map(item => {
+              item.projectName = item.title
+              return item
+            }),
+          })
+        }
+      },
+      // 查询条件更新，查询结果
+      handleSearch(e) {
+        this.queryParams.pageNum = 1
+        this.queryParams.searchKey = e
+        this.selectedRowKeys = []
+        this.handleQuery()
+      },
+      /**页码变更 */
+      pageChange(page, pageSize) {
+        this.selectAll = false
+        this.selectedRowKeys = []
+        this.queryParams.pageNum = page
+        this.handleQuery()
+      },
+      /**每页数变更 */
+      pageSizeChange(page, pageSize) {
+        this.selectAll = false
+        this.selectedRowKeys = []
+        this.queryParams.pageNum = 1
+        this.queryParams.pageSize = pageSize
+        this.handleQuery()
+      },
+      /**表格操作 */
+      handleRowClick(clickType, rowData, record) {
+        if (clickType === 'action') {
+          if (rowData.key === 'projectName') {
+            this.$globalDrawer.show({
+              component: FundDetail,
+              options: {
+                name: 'FundDetail',
+                title: '基金课题详情',
+                props: { id: record.tokenEncodeId },
+              },
+            })
+          }
+        }
+      },
+      /**点击负责人 */
+      handleUserClick(user) {
+        if (user.customerId) {
+          this.$globalDrawer.show({
+            component: ResearcherDetail,
+            options: {
+              name: 'ResearcherDetail',
+              title: '科研客户详情',
+              props: {
+                id: user.customerId,
+              },
+              parent: this.$parent,
+            },
+          })
+        }
+      },
+    },
+  }
+</script>
+
+<style lang="less" scoped>
+  .fund-table {
+    .table-pad {
+      .actions-wrapper {
+        .reset-search-btn {
+          width: 104px;
+          height: 32px;
+          opacity: 1;
+          border: 1px solid #00c7db;
+          border-radius: 17px;
+          text-align: center;
+          line-height: 32px;
+          margin-left: 24px;
+          font-weight: 400;
+          color: #00c7db;
+          font-size: 14px;
+          cursor: pointer;
+          img {
+            height: 12px;
+            opacity: 0.65;
+            vertical-align: -1px;
+          }
+        }
+      }
+    }
+
+    .action-item-user {
+      cursor: pointer;
+      color: #00c7db;
+
+      > i {
+        color: #444;
+        cursor: auto;
+      }
+
+      &.disabled {
+        color: #444;
+        cursor: auto;
+      }
+    }
+  }
+</style>
