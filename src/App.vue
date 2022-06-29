@@ -4,9 +4,7 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN'
 </script>
 <template>
   <a-config-provider :locale="zhCN">
-    <div id="app">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </a-config-provider>
 </template>
 

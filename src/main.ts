@@ -10,4 +10,5 @@ app.use(antd)
 app.use(router)
 app.use(store)
 app.mount('#app')
-export default app
+
+

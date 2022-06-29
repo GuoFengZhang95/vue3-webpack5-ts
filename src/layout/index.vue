@@ -40,7 +40,7 @@ export default {
     // AppMain,
   },
   setup() {
-    let navW = ref(0)
+    let navW = ref<number>(0)
     let containerW = ref(0)
     let subViewH = ref(0)
     let mainH = ref(0)
@@ -49,7 +49,6 @@ export default {
       resize()
     }
     function resize() {
-      console.log('resize')
       let clientW = document.body.clientWidth
       let clientH = document.body.clientHeight
       navW.value = navW.value || document.getElementById('nav')?.offsetWidth || 0

@@ -2,22 +2,58 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "strict": true,
-    "jsx": "preserve",
     "moduleResolution": "node",
-    "baseUrl": "./",
-    "allowJs": false,
+    "jsx": "preserve",
+    // 基础解析路径
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "src/*"
       ]
     },
+    // 使用默认的类型定义
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    // 需要解析的外部类型文件，指向node_modules/@types/
+    "types": [
+      "node"
+    ],
+    // 一键开启所有的严格配置，可以单独关闭
+    "strict": true,
+    // 禁止any
+    "noImplicitAny": false,
+    // 禁止未使用的变量
+    "noUnusedLocals": true,
+    // 禁止未使用的参数 todo：目前会影响.vue文件的编译
+    "noUnusedParameters": false,
+    // 允许默认导入没有默认导出的模块（允许导入json文件的前置条件）
+    "allowSyntheticDefaultImports": true,
+    // 允许导入json文件
+    "resolveJsonModule": true,
+    "allowJs": true,
+    // 大小写敏感检测（取决于系统是否支持）
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    // 忽略声明文件的类型检查 todo:待确认
+    "skipLibCheck": true,
+    "removeComments": true,
   },
   "include": [
-    "src/**/*",
-    "*.d.ts"
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/**/*.d.ts",
+    "types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-  ]
+    "dist",
+    "**/*.js",
+    "src/**/*.md",
+  ],
 }

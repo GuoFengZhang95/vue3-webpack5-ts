@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
-    path: '/',
-    component: () => import('../layout/index.vue'),
+    path: '/dashboard',
+    component: () => import('../views/dashboard/index.vue'),
   },
   // 403
   {
     path: '/403',
     name: 'Page403',
-    component: () => import('../views/errorpage/403.vue'),
+    component: () => import('../views/errorpage/forbidden.vue'),
     meta: {
       title: '403',
       isTagView: true,
@@ -20,7 +20,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'Page404',
-    component: () => import('@/views/errorpage/404.vue'),
+    component: () => import('@/views/errorpage/notFund.vue'),
     meta: {
       title: '404',
       isTagView: true,

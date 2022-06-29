@@ -70,7 +70,7 @@ const components: Plugin[] = [
   Switch,
 ]
 export default {
-  install: (app: App, options: any) => {
+  install: (app: App) => {
     components.forEach(com => {
       app.use(com)
     })
