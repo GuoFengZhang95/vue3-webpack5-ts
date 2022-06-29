@@ -1,10 +1,14 @@
-<script setup lang="ts">
+<script lang="ts">
+export default {
+  name: 'Page403',
+}
 </script>
+
 <template>
   <div>
-    <h1>403</h1>
+    <h1>Page 403</h1>
   </div>
 </template>
 
-<style lang="css">
+<style lang="scss" scoped>
 </style>

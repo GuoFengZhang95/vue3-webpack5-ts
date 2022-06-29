@@ -1,20 +1,20 @@
 <template>
   <div id="layout">
     <!-- 顶部导航 -->
-    <header-bar></header-bar>
+    <!-- <header-bar></header-bar> -->
     <!-- 1级主体内容 -->
     <div id="main" :style="{ height: `${mainH}px` }">
       <!-- 侧边导航 -->
       <div id="nav" :style="{ width: `${navW}px` }">
-        <AsideBar :main-h="mainH" @changeSideBar="changeSideBar"></AsideBar>
+        <!-- <AsideBar :main-h="mainH" @changeSideBar="changeSideBar"></AsideBar> -->
       </div>
       <div id="container" :style="{ width: `${containerW}px` }">
         <!-- 全局tab页签 -->
-        <TagsView></TagsView>
+        <!-- <TagsView></TagsView> -->
 
         <div id="sub-view" class="sub-view" :style="{ height: `${subViewH}px` }">
           <!-- 2级主体内容 -->
-          <app-main></app-main>
+          <!-- <app-main></app-main> -->
         </div>
 
       </div>
@@ -26,10 +26,10 @@
 <script lang="ts">
 import { ref, onMounted } from 'vue'
 import { useEventListener } from '@vueuse/core'
-import HeaderBar from './components/HeaderBar.vue'
+// import HeaderBar from './components/HeaderBar.vue'
 // import AsideBar from './components/AsideBar.vue'
 // import TagsView from './components/TagsView.vue'
-import AppMain from './components/AppMain.vue'
+// import AppMain from './components/AppMain.vue'
 
 export default {
   name: 'Layout',
@@ -37,7 +37,7 @@ export default {
     // HeaderBar,
     // AsideBar,
     // TagsView,
-    AppMain,
+    // AppMain,
   },
   setup() {
     let navW = ref(0)
