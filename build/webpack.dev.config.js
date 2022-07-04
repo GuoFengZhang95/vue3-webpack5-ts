@@ -5,7 +5,7 @@ const Webpack = require('webpack')
 const { getPort } = require('./utils')
 module.exports = async entry => {
   const { mode, env } = entry
-  const portInfo = await getPort({ port: 4396, host: 'localhost' })
+  const portInfo = await getPort({ port: 4396, host: 'mysaas.17m17.com' })
   const devServerConfig = {
     mode: 'development',
     devtool: 'eval-source-map',
@@ -25,10 +25,50 @@ module.exports = async entry => {
       server: 'http',
       compress: true,
       proxy: {
-        '/api': {
-          target: `https://api${env}.mumuxili.com`,
+        '/mall-api': {
+          target: `https://mall-api${env}.mumuxili.com`,
           changeOrigin: true,
           pathRewrite: { '^/mall-api': '' },
+        },
+        '/vip-api': {
+          target: `https://vip${env}.mumuxili.com`,
+          changeOrigin: true,
+          pathRewrite: { '^/vip-api': '' },
+        },
+        '/login-api': {
+          target: `https://login-api${env}.mumuxili.com`,
+          changeOrigin: true,
+          pathRewrite: { '^/login-api': '' },
+        },
+        '/api-api': {
+          target: `https://api${env}.mumuxili.com`,
+          changeOrigin: true,
+          pathRewrite: { '^/api-api': '' },
+        },
+        '/service-login-api': {
+          target: `https://login${env}.mumuxili.com`,
+          changeOrigin: true,
+          pathRewrite: { '^/service-login-api': '' },
+        },
+        '/mis-service': {
+          target: `https://mis-service${env}.mumuxili.com`,
+          changeOrigin: true,
+          pathRewrite: { '^/mis-service': '' },
+        },
+        '/yqmm-api': {
+          target: `https://yqmm-api${env}.mumuxili.com`,
+          changeOrigin: true,
+          pathRewrite: { '^/yqmm-api': '' },
+        },
+        '/app-web-api': {
+          target: `https://app-web${env}.17m17.com`,
+          changeOrigin: true,
+          pathRewrite: { '^/app-web-api': '' },
+        },
+        '/yqmm-service-api': {
+          target: `https://yqmm-service${env}.mumuxili.com`,
+          changeOrigin: true,
+          pathRewrite: { '^/yqmm-service-api': '' },
         },
       },
       setupMiddlewares: (middlewares, devServer) => {
