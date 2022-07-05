@@ -4,6 +4,45 @@ const routes = [
     path: '/dashboard',
     component: () => import('../views/dashboard/index.vue'),
   },
+  // 登录页
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/login/index.vue'),
+    meta: {
+      title: '登录页面',
+      isTagView: true,
+      cache: false,
+      affix: false,
+      breadcrumb: false
+    },
+  },
+  // 修改密码页面
+  // {
+  //   path: '/password',
+  //   name: 'Password',
+  //   component: () => import('@/views/login/password'),
+  //   meta: {
+  //     title: '修改密码',
+  //     isTagView: true,
+  //     cache: false,
+  //     affix: false,
+  //     breadcrumb: false
+  //   },
+  // },
+  // 第三方授权回跳页面
+  {
+    path: '/bind',
+    name: 'LoginBind',
+    component: () => import('@/views/login/bind.vue'),
+    meta: {
+      itle: '第三方授权',
+      isTagView: true,
+      cache: false,
+      affix: false,
+      breadcrumb: false
+    },
+  },
   // 403
   {
     path: '/403',

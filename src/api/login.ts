@@ -1,5 +1,6 @@
 import request from '@/utils/request/index'
 import { GLOBAL_CONSTANT } from './constant'
+import { AdverModel } from './types'
 import domain from './domain'
 
 export function login(data = {}) {
@@ -22,8 +23,8 @@ export function logout() {
   window.location.href = GLOBAL_CONSTANT.logoutUrl
 }
 
-export function queryAdvertisement(data = {}) {
-  return request({
+export function queryAdvertisement(data: { name: string, count: number }) {
+  return request<AdverModel>({
     url: '/yqmm/advertisement/info',
     method: 'get',
     params: data,
