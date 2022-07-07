@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { getBaseUserInfo } from '@/api/index'
-const useAppStore = defineStore('app', {
+const useAppStore = defineStore('user', {
   state: () => {
     return {
       baseUserInfo: {},
