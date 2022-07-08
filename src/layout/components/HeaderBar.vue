@@ -1,14 +1,96 @@
 <template>
-  <h1>我是headerbar</h1>
+  <div id="header-bar" ref="headerBar">
+    <div class="left">
+      <div class="header-logo" @click="goDashboard">
+        <img src="@/assets/images/common/system-logo.svg" />
+      </div>
+      <div class="header-menu">
+        <div v-for="(e, i) in headerList" :key="i" :class="$route.path.indexOf(e.path) > -1 ? 'active' : ''"
+          class="header-menu-item" @mouseenter="; (hover = true), (cur = i)" @mouseleave="; (hover = false), (cur = '')"
+          @click="handleMenuSelect(e)">
+          <img v-if="$route.path.indexOf(e.path) > -1 || (hover && cur === i)" class="mmxlicon" :src="e.icon_h"
+            alt="pic" />
+          <img v-else class="mmxlicon" :src="e.icon" alt="pic" />
+          <span>{{ e.label }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <a-dropdown :get-popup-container="() => headerBar">
+        <div class="login-avatar">
+          <img :src="avatar" alt="avatar" />
+        </div>
+        <template #overlay>
+          <a-menu class="mini-pro-menu">
+            <a-menu-item>
+              <div class="login-out" @click="goHelpCenter">帮助中心</div>
+            </a-menu-item>
+            <a-menu-item>
+              <div class="login-out" @click="exit">退出登录</div>
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+import { defineComponent, ref, computed } from 'vue'
+import { logout } from '@/api/index'
+import { useUserStore, useRoutesStore } from '@/store/index'
+import router from '@/router/index'
 export default defineComponent({
   name: 'HeaderBar',
   setup() {
+    const userStore = useUserStore()
+    const routeStore = useRoutesStore()
 
+    const baseUserInfo = computed(() => {
+      return userStore.baseUserInfo
+    })
+    const avatar = computed(() => {
+      return baseUserInfo.value.avatar
+    })
+    const headerList = computed(() => {
+      const allNavList = routeStore.allNavList
+      return allNavList
+    })
+
+    let hover = ref(false)
+    let cur = ref('')
+    const headerBar = ref<HTMLInputElement | null>(null)
+    const goDashboard = () => {
+      router.push({
+        path: '/dashboard'
+      })
+    }
+    // 切换一级模块
+    const handleMenuSelect = ({ path }) => {
+      console.log(path)
+      // router.push(path)
+    }
+    /**跳转帮助中心 */
+    const goHelpCenter = () => {
+      window.open('https://thoughts.aliyun.com/sharespace/623c471037713d001afe39d5')
+    }
+    /**退出登录 */
+    const exit = () => {
+      logout()
+    }
+
+    return {
+      baseUserInfo,
+      avatar,
+      headerList,
+      hover,
+      cur,
+      headerBar,
+      goHelpCenter,
+      exit,
+      handleMenuSelect,
+      goDashboard
+    }
   },
 })
 </script>
@@ -20,6 +102,8 @@ export default defineComponent({
   justify-content: space-between;
   color: #ffffff;
   padding-right: 30px;
+  height: 60px;
+  line-height: 60px;
 
   .left {
     display: flex;
@@ -128,3 +212,4 @@ export default defineComponent({
   }
 }
 </style>
+

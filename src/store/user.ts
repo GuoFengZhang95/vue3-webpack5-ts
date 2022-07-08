@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { getBaseUserInfo } from '@/api/index'
+import type { BaseUserInfo } from '../api/types/index'
 const useAppStore = defineStore('user', {
   state: () => {
     return {
-      baseUserInfo: {},
+      baseUserInfo: {} as BaseUserInfo,
       isYunfuLogin: false,
     }
   },
@@ -12,7 +13,7 @@ const useAppStore = defineStore('user', {
     async setBaseUserInfo() {
       let baseUserInfoRes = await getBaseUserInfo()
       if (baseUserInfoRes.code === '0') {
-        this.baseUserInfo = baseUserInfoRes
+        this.baseUserInfo = baseUserInfoRes.data
       }
       return baseUserInfoRes
     },
@@ -22,9 +23,7 @@ const useAppStore = defineStore('user', {
     },
   },
   getters: {
-    baseUserInfo: state => {
-      return state.baseUserInfo
-    },
+
   }
 })
 export default useAppStore
