@@ -37,8 +37,10 @@ service.interceptors.response.use(
     }
   },
   error => {
-    message.error('网络异常', 2)
-    console.log('response error' + error)
+    // 兼容firefox对网络请求取消的处理策略
+    if (error.code !== 'ECONNABORTED') {
+      message.error('网络异常', 2)
+    }
     return Promise.reject(error)
   }
 )

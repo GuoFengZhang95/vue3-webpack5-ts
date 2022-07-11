@@ -2,12 +2,12 @@ import { defineStore } from 'pinia'
 import yqmmpro from './yqmmpro/index'
 import ai from './ai/index'
 import system from './system'
-type NavKey = 'yqmmpro' | 'ai' | 'system'
-export type NavItem = {
+export type NavKey = 'yqmmpro' | 'ai' | 'system'
+export type NavItem<T = string> = {
   icon_h: string,
   icon: string,
   label: string,
-  path: string,
+  path: T,
   children?: NavItem[]
 }
 export type AllNavList = {
@@ -45,15 +45,13 @@ const useRoutesStore = defineStore('routes', {
     }
   },
   actions: {
-    // 异步获取导航栏
+    /**异步获取导航栏 */
     getAsideList(module: NavKey) {
       setTimeout(() => {
         this.asideList = this.allNavList[module]?.children ?? []
       }, 500)
     },
   },
-  getters: {
-
-  }
+  getters: {}
 })
 export default useRoutesStore

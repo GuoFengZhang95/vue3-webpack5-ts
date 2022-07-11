@@ -5,7 +5,7 @@ const Webpack = require('webpack')
 const { getPort } = require('./utils')
 module.exports = async entry => {
   const { mode, env } = entry
-  const portInfo = await getPort({ port: 443, host: 'mysaas.17m17.com' })
+  const portInfo = await getPort({ port: 443, host: 'mysaasts.17m17.com' })
   const devServerConfig = {
     mode: 'development',
     devtool: 'eval-source-map',

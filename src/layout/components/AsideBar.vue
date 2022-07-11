@@ -1,11 +1,11 @@
 <template>
-  <div id="nav-bar" :class="type ? 'wide' : 'thin'">
-    <a-button class="nav-bar-auto" @click="changeSideBar(!type)">
-      <span class="mmxlicon" :class="type ? 'mi-menu' : 'mi-right'"></span>
-      <span v-if="type">收起菜单</span>
+  <div id="nav-bar" :class="!collapsed ? 'wide' : 'thin'">
+    <a-button class="nav-bar-auto" @click="toggleSideBar(!collapsed)">
+      <span class="mmxlicon" :class="!collapsed ? 'mi-menu' : 'mi-right'"></span>
+      <span v-if="!collapsed">收起菜单</span>
     </a-button>
-    <div :style="{ height: `${mainH - 40}px` }" class="nav-warpper">
-      <template v-if="type">
+    <div class="nav-warpper">
+      <template v-if="!collapsed">
         <menu-item v-for="(e, i) in asideList" :key="i" :menu-item="e" :depth="0"></menu-item>
       </template>
       <template v-else>
@@ -15,60 +15,51 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'pinia'
-import MenuItem from './MenuItem'
-import MenuItemThin from './MenuItemThin'
-export default {
+<script lang="ts">
+import { defineComponent, ref, computed } from 'vue'
+import { useRoutesStore } from '@/store/index'
+import MenuItem from './MenuItem.vue'
+import MenuItemThin from './MenuItemThin.vue'
+export default defineComponent({
   name: 'AsideBar',
-  components: { MenuItem, MenuItemThin },
-  props: {
-    mainH: {
-      type: Number,
-      default: 0,
-    },
+  components: {
+    MenuItem,
+    MenuItemThin
   },
-  data() {
+  setup() {
+    /**是否折叠 */
+    let collapsed = ref(false)
+    const routeStore = useRoutesStore()
+    const asideList = computed(() => {
+      return routeStore.asideList
+    })
+    const toggleSideBar = (flag: boolean) => {
+      collapsed.value = flag
+    }
     return {
-      type: true,
-      collapsed: false,
+      collapsed,
+      asideList,
+      toggleSideBar
     }
   },
-  computed: {
-    ...mapGetters(['asideList']),
-  },
-  watch: {
-    $route: {
-      handler(val) {
-        // console.log('route', val)
-      },
-      immediate: true,
-    },
-  },
-  mounted() {
-    this.reisze()
-    window.addEventListener('resize', this.reisze)
-  },
-  methods: {
-    // 屏幕缩放
-    reisze() {
-      let _this = this
-      let clientW = document.body.clientWidth
-      _this.type = clientW >= 1080
-      _this.$emit('changeSideBar', _this.type ? '180' : '52')
-    },
-    // 切换测导航类型
-    changeSideBar(val) {
-      this.type = val
-      this.$emit('changeSideBar', val ? '180' : '52')
-    },
-  },
-}
+})
 </script>
 
 <style lang="less" scoped>
 #nav-bar {
-  transition: all 0.4s;
+  overflow: hidden;
+  overflow-y: auto;
+  background: #fff;
+  transition: all .3s;
+
+  &.wide {
+    width: 180px;
+  }
+
+  &.thin {
+    width: 52px;
+    overflow: hidden;
+  }
 
   .mmxlicon {
     font-size: 18px;
@@ -104,6 +95,7 @@ export default {
   }
 
   .nav-warpper {
+    height: calc(100vh - 60px - 40px);
     overflow-x: hidden;
     overflow-y: auto;
 
@@ -118,14 +110,5 @@ export default {
   .active {
     color: #00c7db;
   }
-}
-
-.wide {
-  width: 180px;
-}
-
-.thin {
-  width: 52px;
-  overflow: hidden;
 }
 </style>

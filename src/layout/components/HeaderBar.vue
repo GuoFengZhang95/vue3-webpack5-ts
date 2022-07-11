@@ -40,6 +40,7 @@ import { defineComponent, ref, computed } from 'vue'
 import { logout } from '@/api/index'
 import { useUserStore, useRoutesStore } from '@/store/index'
 import router from '@/router/index'
+import type { NavItem, NavKey } from '@/store/routes/index'
 export default defineComponent({
   name: 'HeaderBar',
   setup() {
@@ -65,10 +66,9 @@ export default defineComponent({
         path: '/dashboard'
       })
     }
-    // 切换一级模块
-    const handleMenuSelect = ({ path }) => {
-      console.log(path)
-      // router.push(path)
+    /**切换一级模块 */
+    const handleMenuSelect = (e: NavItem) => {
+      routeStore.getAsideList(e.path.replace('/', '') as NavKey)
     }
     /**跳转帮助中心 */
     const goHelpCenter = () => {
