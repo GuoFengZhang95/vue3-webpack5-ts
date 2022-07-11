@@ -3,7 +3,7 @@ const routes = [
   {
     path: '/',
     component: import('@/layout/index.vue'),
-    // redirect: '/dashboard',
+    redirect: '/dashboard',
   },
   {
     path: '/dashboard',

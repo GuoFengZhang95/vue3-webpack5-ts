@@ -32,6 +32,7 @@ import {
   TimePicker,
   Carousel,
   Switch,
+  Image
 } from 'ant-design-vue'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.less' // 使用定制主题色的话需要引入less文件，配合webpack的less-loader
@@ -68,6 +69,7 @@ const components: Plugin[] = [
   TimePicker,
   Carousel,
   Switch,
+  Image
 ]
 export default {
   install: (app: App) => {

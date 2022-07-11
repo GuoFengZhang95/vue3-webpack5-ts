@@ -1,6 +1,6 @@
 <template>
   <a-config-provider :locale="zhCN">
-    <router-view></router-view>
+    <RouterView></RouterView>
   </a-config-provider>
 </template>
 <script setup lang="ts">

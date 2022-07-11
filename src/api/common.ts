@@ -1,5 +1,5 @@
 import request from '@/utils/request/index'
-import { LoginStatusModel, BaseUserInfoModel } from './types'
+import { JavaListReqModel, LoginStatusModel, BaseUserInfoModel, SystemNoReadModel } from './types'
 import domain from './domain'
 
 /**
@@ -13,12 +13,24 @@ export function getLoginStatus() {
     baseURL: domain.Api_Base_Url,
   })
 }
-// 获取用户信息
+/**
+ * @description 获取用户信息
+ *  
+ */
 export function getBaseUserInfo() {
   return request<BaseUserInfoModel>({
     url: '/web/getUserInfo',
     method: 'get',
     params: '',
+    baseURL: domain.App_Web_Base_Url,
+  })
+}
+/**获取未读通知列表 */
+export function getSystemNoReadList(data: JavaListReqModel) {
+  return request<SystemNoReadModel>({
+    url: '/web/noReadList',
+    method: 'get',
+    params: data,
     baseURL: domain.App_Web_Base_Url,
   })
 }

@@ -5,7 +5,7 @@
       <!-- 接口待进一步优化 a-row在火狐有兼容性问题 -->
       <a-row :gutter="[0, 0]">
         <a-col :span="24">
-          <!-- <saas-info></saas-info> -->
+          <saas-info></saas-info>
         </a-col>
       </a-row>
       <a-row :gutter="[10, 20]" align="stretch" type="flex" style="margin-top: 0px">
@@ -24,11 +24,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import HeaderBar from '@/layout/components/HeaderBar.vue'
+import SaasInfo from './components/SaasInfo.vue'
 export default defineComponent({
   name: 'SaasDashboard',
   components: {
     HeaderBar,
-    // SaasInfo,
+    SaasInfo,
     // UnlockTimesStatistics,
     // QuickAccess,
     // DynamicMonitoring,
