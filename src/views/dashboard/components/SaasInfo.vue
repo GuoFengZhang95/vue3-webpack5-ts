@@ -85,6 +85,7 @@ export default defineComponent({
       getNoticeList()
       // todo 全局事件总线
     })
+
     const baseUserInfo = computed(() => {
       return userStore.baseUserInfo
     })
@@ -114,7 +115,7 @@ export default defineComponent({
     /**获取消息列表 */
     function getNoticeList() {
       getSystemNoReadList({ pageNum: 1, pageSize: 4 }).then(res => {
-        noticeList = res.data.list
+        noticeList.push(...res.data.list)
         total.value = res.data.total
         if (total.value > 99) {
           total.value = '99+'

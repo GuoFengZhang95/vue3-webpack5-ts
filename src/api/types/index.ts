@@ -23,7 +23,7 @@ export type JavaListReqModel = {
 // api 返回类型
 export type LoginStatusModel = { success: boolean, avatar: string, cartCount: number, isLogin: boolean, loginurl: string, name: string, nologin: boolean, regUrl: string }
 
-export type BaseUserInfo = { authenticated: OnOff, avatar: string, userName:string, companyId: number, companyMember: { companyEquity: Maybe<OnOff>, equityCount: Maybe<number>, id: Maybe<number>, isAdmin: Maybe<OnOff>, mobile: string, moduleAuthority: Maybe<string>, position: Maybe<string>, realName: Maybe<string>, roleIds: string }, createtime: string, isAdmin: Maybe<OnOff>, isOfficial: OnOff, mobile: string, position: Maybe<string>, unitName: string, userId: number, userType: number }
+export type BaseUserInfo = { authenticated: OnOff, avatar: string, userName: string, companyId: number, companyMember: { companyEquity: Maybe<OnOff>, equityCount: Maybe<number>, id: Maybe<number>, isAdmin: Maybe<OnOff>, mobile: string, moduleAuthority: Maybe<string>, position: Maybe<string>, realName: Maybe<string>, roleIds: string }, createtime: string, isAdmin: Maybe<OnOff>, isOfficial: OnOff, mobile: string, position: Maybe<string>, unitName: string, userId: number, userType: number }
 export type BaseUserInfoModel = JavaResModel<BaseUserInfo>
 
 export type AdverModel = PhpResModel<{
@@ -51,3 +51,21 @@ export type SystemNoReadModel = PhpResModel<{
   total: number
   totalPage: number, list: SystemNoRead[]
 } & JavaListReqModel>
+
+export type UnlockStat = {
+  /**招投标 */
+  biddingCount: number,
+  /**需求接单 */
+  businessCount: number,
+  /**科研客户 */
+  customerCount: number,
+  /**重大商情 */
+  importantBusinessCount: number,
+  /**采购单位 */
+  purchaseAnalysisCount: number,
+  /**采购意向 */
+  purchaseCount: number,
+  /**基金课题 */
+  tprojectCount: number,
+}
+export type UnlockStatModel = JavaResModel<UnlockStat>

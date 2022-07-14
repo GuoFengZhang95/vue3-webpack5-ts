@@ -3,18 +3,26 @@
     <HeaderBar></HeaderBar>
     <div class="content">
       <!-- 接口待进一步优化 a-row在火狐有兼容性问题 -->
-      <a-row :gutter="[0, 0]">
+      <a-row :gutter="[0, 10]">
         <a-col :span="24">
-          <saas-info></saas-info>
+          <SaasInfo></SaasInfo>
         </a-col>
-      </a-row>
-      <a-row :gutter="[10, 20]" align="stretch" type="flex" style="margin-top: 0px">
-        <a-col :span="16">
-          <!-- <unlock-times-statistics></unlock-times-statistics> -->
-          <!-- <quick-access></quick-access> -->
-        </a-col>
-        <a-col :span="8">
-          <!-- <dynamic-monitoring></dynamic-monitoring> -->
+        <a-col :span="24">
+          <a-row :gutter="[0, 10]">
+            <a-col :span="16">
+              <a-row :gutter="[0, 10]">
+                <a-col :span="24">
+                  <UnlockTimesStatistics></UnlockTimesStatistics>
+                </a-col>
+                <a-col :span="24">
+                  <QuickAccess></QuickAccess>
+                </a-col>
+              </a-row>
+            </a-col>
+            <a-col :span="8">
+              <!-- <dynamic-monitoring></dynamic-monitoring> -->
+            </a-col>
+          </a-row>
         </a-col>
       </a-row>
     </div>
@@ -25,24 +33,22 @@
 import { defineComponent } from 'vue'
 import HeaderBar from '@/layout/components/HeaderBar.vue'
 import SaasInfo from './components/SaasInfo.vue'
+import QuickAccess from './components/QuickAccess.vue'
+import UnlockTimesStatistics from './components/UnlockTimesStatistics.vue'
+// import DynamicMonitoring from './components/DynamicMonitoring.vue'
 export default defineComponent({
   name: 'SaasDashboard',
   components: {
     HeaderBar,
     SaasInfo,
-    // UnlockTimesStatistics,
-    // QuickAccess,
+    UnlockTimesStatistics,
+    QuickAccess,
     // DynamicMonitoring,
   },
   setup() {
 
   }
 })
-  // import HeaderBar from '@/layout/components/HeaderBar'
-  // import SaasInfo from './components/SaasInfo'
-  // import UnlockTimesStatistics from './components/UnlockTimesStatistics.vue'
-  // import QuickAccess from './components/QuickAccess.vue'
-  // import DynamicMonitoring from './components/DynamicMonitoring.vue'
 </script>
 
 <style lang="less" scoped>

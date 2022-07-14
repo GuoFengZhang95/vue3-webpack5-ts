@@ -13,10 +13,7 @@ export function getLoginStatus() {
     baseURL: domain.Api_Base_Url,
   })
 }
-/**
- * @description 获取用户信息
- *  
- */
+/**获取用户信息 */
 export function getBaseUserInfo() {
   return request<BaseUserInfoModel>({
     url: '/web/getUserInfo',
