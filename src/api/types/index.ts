@@ -26,9 +26,6 @@ export type LoginStatusModel = { success: boolean, avatar: string, cartCount: nu
 export type BaseUserInfo = { authenticated: OnOff, avatar: string, userName: string, companyId: number, companyMember: { companyEquity: Maybe<OnOff>, equityCount: Maybe<number>, id: Maybe<number>, isAdmin: Maybe<OnOff>, mobile: string, moduleAuthority: Maybe<string>, position: Maybe<string>, realName: Maybe<string>, roleIds: string }, createtime: string, isAdmin: Maybe<OnOff>, isOfficial: OnOff, mobile: string, position: Maybe<string>, unitName: string, userId: number, userType: number }
 export type BaseUserInfoModel = JavaResModel<BaseUserInfo>
 
-export type AdverModel = PhpResModel<{
-  imgs: AdverItem[]
-}[]>
 export type AdverItem = {
   description: string
   img: string
@@ -38,6 +35,9 @@ export type AdverItem = {
   type: number
   url: string
 }
+export type AdverModel = PhpResModel<{
+  imgs: AdverItem[]
+}[]>
 
 export type SystemNoRead = {
   isRead: OnOff,
@@ -69,3 +69,15 @@ export type UnlockStat = {
   tprojectCount: number,
 }
 export type UnlockStatModel = JavaResModel<UnlockStat>
+
+export type NoticeDetail = {
+  content: string,
+  noticeId: number,
+  sendTime: string,
+  senderId: number,
+  senderName: string,
+  title: string,
+  type: 1 | 2,
+  ossUploadResultList?: { name: string, originalFileName: string, originalSize: number, size: string, type: string, uploadTime: string, url: string }[]
+}
+export type NoticeDetailModel = JavaResModel<NoticeDetail>

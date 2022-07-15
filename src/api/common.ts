@@ -1,5 +1,11 @@
 import request from '@/utils/request/index'
-import { JavaListReqModel, LoginStatusModel, BaseUserInfoModel, SystemNoReadModel } from './types'
+import {
+  JavaListReqModel,
+  LoginStatusModel,
+  BaseUserInfoModel,
+  SystemNoReadModel,
+  NoticeDetailModel
+} from './types'
 import domain from './domain'
 
 /**
@@ -29,5 +35,23 @@ export function getSystemNoReadList(data: JavaListReqModel) {
     method: 'get',
     params: data,
     baseURL: domain.App_Web_Base_Url,
+  })
+}
+/**获取通知详情 */
+export function getNoticeDetail(data: { noticeId: number }) {
+  return request<NoticeDetailModel>({
+    url: '/web/noticeDetail',
+    method: 'get',
+    params: data,
+    baseURL: domain.App_Web_Base_Url,
+  })
+}
+/**获取文件的阿里云下载地址 */
+export function getAliyunOSSUrl(data: { fileUrl: string }) {
+  return request<{ data: string }>({
+    url: '/app/aliyun/oss/generateUrl',
+    method: 'get',
+    params: data,
+    baseURL: domain.Mis_Service_Url,
   })
 }

@@ -20,4 +20,3 @@ app.use(store)
 app.use(MuUI)
 app.mount('#app')
 
-

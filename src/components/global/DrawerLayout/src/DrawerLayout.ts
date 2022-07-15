@@ -1,22 +1,20 @@
 // @ts-nocheck
-import { h, render, watch } from 'vue'
-
-import DrawerLayoutConstructor from './index.vue'
-
+import { h, render, watch, isVNode, vModelCheckbox } from 'vue'
+import { hasOwn } from '@vue/shared'
 import type { AppContext, ComponentPublicInstance } from 'vue'
-import { isVNode } from 'vue'
+import DrawerLayoutConstructor from './index.vue'
+// import DrawerLayoutConstructor from './indexH.vue'
+type DLVM = InstanceType<typeof DrawerLayoutConstructor>
 
-const messageInstance = new Map<
-  ComponentPublicInstance<{ doClose: () => void }>,
-  {
-    options: any
-    resolve: (res: any) => void
-    reject: (reason?: any) => void
-  }
->()
+let drawerLayoutInstance: {
+  vm: DLVM,
+  options: any,
+  resolve: (res: any) => void
+  reject: (reason?: any) => void
+} | null = null
 
 const initInstance = (
-  props: any,
+  props: { component: T, props: object, configs: object },
   container: HTMLElement,
   appContext: AppContext | null = null
 ) => {
@@ -31,27 +29,22 @@ const genContainer = () => {
   return document.createElement('div')
 }
 
-const showMessage = (options: any, appContext?: AppContext | null) => {
+const showMessage = (options: { component: T, props: object, configs: object }, appContext?: AppContext | null) => {
   const container = genContainer()
+  // 注册自定义事件
   // 卸载组件
   options.onVanish = () => {
     render(null, container)
-    messageInstance.delete(vm)
   }
 
   const instance = initInstance(options, container, appContext)!
 
-  const vm = instance.proxy as ComponentPublicInstance<
-    {
-      visible: boolean
-    }
-  >
+  const vm = instance.proxy as DLVM
 
   for (const prop in options) {
-    // 合并传入props
-    // if (hasOwn(options, prop) && !hasOwn(vm.$props, prop)) {
-    //   vm[prop as string] = options[prop]
-    // }
+    if (hasOwn(options, prop) && !hasOwn(vm.$props, prop)) {
+      vm[prop as string] = options[prop]
+    }
   }
 
   watch(
@@ -72,35 +65,30 @@ const showMessage = (options: any, appContext?: AppContext | null) => {
   return vm
 }
 
-async function DrawerLayout(
-  options: any,
-  appContext?: AppContext | null
-): Promise<{ value: string; action: any }>
+// async function DrawerLayout<T>(
+//   options: { component: T, props: object, configs: object },
+//   appContext?: AppContext | null
+// ): Promise<{ value: string; action: any } | void>
 function DrawerLayout(
-  options: any,
+  options: { component: T; props: object; configs: object },
   appContext: AppContext | null = null
 ): Promise<{ value: string; action: any }> {
-  let callback: any
-  callback = options.callback
-  return new Promise((resolve, reject) => {
-    console.log('DrawerLayout._context', DrawerLayout._context)
-    const vm = showMessage(options, appContext ?? DrawerLayout._context)
-    // collect this vm in order to handle upcoming events.
-    messageInstance.set(vm, {
-      options,
-      callback,
-      resolve,
-      reject,
+  if (drawerLayoutInstance) {
+    // console.log(drawerLayoutInstance)
+    drawerLayoutInstance.vm.show({}, {})
+  } else {
+    return new Promise((resolve, reject) => {
+      console.log('appContext', appContext)
+
+      const vm = showMessage(options, appContext ?? DrawerLayout._context)
+      drawerLayoutInstance = {
+        vm,
+        options,
+        resolve,
+        reject,
+      }
     })
-  })
-}
-
-DrawerLayout.close = () => {
-  messageInstance.forEach((_, vm) => {
-    vm.doClose()
-  })
-
-  messageInstance.clear()
+  }
 }
 
 DrawerLayout._context = null

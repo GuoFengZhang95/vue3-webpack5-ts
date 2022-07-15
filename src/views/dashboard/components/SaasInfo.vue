@@ -68,14 +68,15 @@
 <script lang="ts">
 import { defineComponent, ref, computed, reactive, onMounted } from 'vue'
 import type { SystemNoRead } from '@/api/types/index'
-// import NoticeDetail from '@/views/system/notice/components/detail.vue'
+import NoticeDetail from '@/views/system/notice/components/detail.vue'
+import DrawerLayout from '@/components/global/DrawerLayout/index'
 import { getSystemNoReadList } from '@/api/index'
 import { useUserStore } from '@/store/index'
 import router from '@/router/index'
 
 export default defineComponent({
   name: 'DashboardSaasInfo',
-  setup() {
+  setup(props, ctx) {
     const userStore = useUserStore()
 
     let noticeList = reactive<SystemNoRead[]>([])
@@ -125,15 +126,16 @@ export default defineComponent({
     /**打开消息详情 */
     function showNoticeDetail(noticeId) {
       // todo 打开消息详情侧拉
-      console.log(noticeId)
-      // this.$globalDrawer.show({
-      //   component: NoticeDetail,
-      //   options: {
-      //     name: 'NoticeDetail',
-      //     title: '消息详情',
-      //     props: { id: noticeId },
-      //   },
-      // })
+      DrawerLayout({
+        component: NoticeDetail,
+        props: {
+          noticeId: noticeId
+        },
+        configs: {
+          title: '',
+          name: ''
+        }
+      })
     }
     /**跳转成员管理页面 */
     function goSystemMember() {

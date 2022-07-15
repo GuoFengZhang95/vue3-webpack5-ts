@@ -29,12 +29,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, getCurrentInstance } from 'vue'
-import type { ComponentPublicInstance } from 'vue'
+import { defineComponent, ref, reactive, computed } from 'vue'
+// import type { DLVM } from './DrawerLayout.type'
 export default defineComponent({
   name: 'DrawerLayout',
-  setup(props, ctx) {
-    console.log('DrawerLayout getCurrentInstance', getCurrentInstance())
+  setup(props, context) {
+    // console.log('DrawerLayout appContext', getCurrentInstance()?.appContext)
+    // console.log('props', props)
+    // console.log('context', context)
 
     let visible = ref(false)
     let dynComList = reactive<any[]>([])
@@ -53,8 +55,7 @@ export default defineComponent({
     function reload() {
       console.log('刷新当前组件')
     }
-    // function show(component: ComponentPublicInstance, options: any): void
-    function show(component: ComponentPublicInstance, options: string) {
+    function show(param) {
       // 动态设置侧拉框高度
       let tagViewEl = document.getElementById('tags-view-container')
       if (tagViewEl) {
@@ -65,6 +66,26 @@ export default defineComponent({
       setTimeout(() => {
         visible.value = true
       }, 0)
+      add(param)
+    }
+    function add(param) {
+      const { options, component } = param
+
+      options.key = new Date().getTime()
+      dynComList.push(component)
+      dynComParamList.push(options)
+    }
+    function close() {
+      dynComList = []
+      dynComParamList = []
+      visible.value = false
+    }
+    function back() {
+      dynComList.pop()
+      dynComParamList.pop()
+      if (dynComList.length === 0) {
+        close()
+      }
     }
 
     return {
@@ -75,7 +96,9 @@ export default defineComponent({
       currentCom,
       reload,
       show,
+      add,
       close,
+      back,
     }
   }
 })
